@@ -1,5 +1,6 @@
 package com.example.chat_gpt_calendar;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +11,13 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class CalendarController {
+
+    @Autowired
+    private Map<String, String> monthNamesMap;
 
     private DateEntry selectedDate = new DateEntry();
 
@@ -24,6 +29,15 @@ public class CalendarController {
 
         model.addAttribute("weeks", weeks);
         model.addAttribute("selectedDate", selectedDate.getSelectedDate());
+
+        LocalDate firstVisibleDay = weeks.get(0).get(0);
+        LocalDate lastVisibleDay = weeks.get(weeks.size() - 1).get(6);
+        String firstMonthName = monthNamesMap.get(firstVisibleDay.getMonth().name().toLowerCase());
+        String lastMonthName = monthNamesMap.get(lastVisibleDay.getMonth().name().toLowerCase());
+
+        model.addAttribute("firstVisibleMonth", firstMonthName);
+        model.addAttribute("lastVisibleMonth", lastMonthName);
+
         return "calendar";
     }
 

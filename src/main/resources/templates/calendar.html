@@ -48,6 +48,7 @@
 		<form th:action="@{/prevMonth}" method="post">
 			<button type="submit" class="btn btn-primary">Предыдущий месяц</button>
 		</form>
+		<span th:text="${firstVisibleMonth} + ' - ' + ${lastVisibleMonth}"></span>
 		<form th:action="@{/nextMonth}" method="post">
 			<button type="submit" class="btn btn-primary">Следующий месяц</button>
 		</form>
