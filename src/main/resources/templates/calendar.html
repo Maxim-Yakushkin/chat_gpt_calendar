@@ -24,20 +24,20 @@
         }
 
         .normal-date {
-	        width: 100%;
-	        height: auto;
+            width: 100%;
+            height: auto;
             background-color: rgba(0, 191, 255, 0.69);
             color: white;
-	        border: none;
+            border: none;
         }
 
         .selected-date {
             width: 100%;
             height: auto;
             background-color: rgb(50, 225, 50);
-	        box-shadow: 0 0 20px lime;
+            box-shadow: 0 0 20px lime;
             color: white;
-            border: none
+            border: none;
         }
 	</style>
 </head>
@@ -71,7 +71,6 @@
 						<button type="submit" class="btn btn-sm btn-outline-primary" th:class="${day == selectedDate ? 'selected-date' : 'normal-date'}" th:text="${day.getDayOfMonth()}"></button>
 					</form>
 				</th:block>
-				<div th:unless="${day != null}" class="empty-day"></div>
 			</div>
 		</th:block>
 	</div>

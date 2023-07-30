@@ -24,6 +24,9 @@ public class CalendarController {
     @GetMapping("/")
     public String showCalendar(Model model) {
         LocalDate today = selectedDate.getSelectedDate() != null ? selectedDate.getSelectedDate() : LocalDate.now();
+        if (selectedDate.getSelectedDate() == null) {
+            selectedDate.setSelectedDate(today); // Установим текущую дату, если не выбрана другая
+        }
         List<LocalDate> currentMonthDays = getCurrentMonthDays(today);
         List<List<LocalDate>> weeks = splitIntoWeeks(currentMonthDays);
 
