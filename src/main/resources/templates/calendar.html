@@ -20,17 +20,24 @@
         .calendar-day {
             text-align: center;
             border: 1px solid #dee2e6;
-            padding: 8px;
+            padding: 1px;
+        }
+
+        .normal-date {
+	        width: 100%;
+	        height: auto;
+            background-color: rgba(0, 191, 255, 0.69);
+            color: white;
+	        border: none;
         }
 
         .selected-date {
-            background-color: green;
+            width: 100%;
+            height: auto;
+            background-color: rgb(50, 225, 50);
+	        box-shadow: 0 0 20px lime;
             color: white;
-            border: none; /* Убираем границы при нажатии на дату */
-        }
-
-        .empty-day {
-            visibility: hidden; /* Скрываем пустую ячейку */
+            border: none
         }
 	</style>
 </head>
@@ -60,7 +67,7 @@
 				<th:block th:if="${day != null}">
 					<form th:action="@{/selectDate}" method="post" th:class="${day?.getMonthValue() != null && selectedDate?.getMonthValue() != null && day.getMonthValue() != selectedDate.getMonthValue() ? 'inactive' : ''}">
 						<input type="hidden" name="selectedDate" th:value="${day}" />
-						<button type="submit" class="btn btn-sm btn-outline-primary" th:class="${day == selectedDate ? 'selected-date' : ''}" th:text="${day.getDayOfMonth()}"></button>
+						<button type="submit" class="btn btn-sm btn-outline-primary" th:class="${day == selectedDate ? 'selected-date' : 'normal-date'}" th:text="${day.getDayOfMonth()}"></button>
 					</form>
 				</th:block>
 				<div th:unless="${day != null}" class="empty-day"></div>
