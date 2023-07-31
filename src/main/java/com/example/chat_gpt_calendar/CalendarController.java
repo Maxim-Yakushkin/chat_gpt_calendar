@@ -7,9 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class CalendarController {
@@ -30,11 +33,10 @@ public class CalendarController {
 
         LocalDate firstVisibleDay = weeks.get(0).get(0);
         LocalDate lastVisibleDay = weeks.get(weeks.size() - 1).get(6);
-        String firstMonthName = LocalizedMonth.valueOf(firstVisibleDay.getMonth().name().toUpperCase()).getLocalizedName();
-        String lastMonthName = LocalizedMonth.valueOf(lastVisibleDay.getMonth().name().toUpperCase()).getLocalizedName();
+        List<String> monthNamesBetween = getMonthNamesBetween(firstVisibleDay.getMonth(), lastVisibleDay.getMonth());
+        String monthNames = String.join(" - ", monthNamesBetween);
 
-        model.addAttribute("firstVisibleMonth", firstMonthName);
-        model.addAttribute("lastVisibleMonth", lastMonthName);
+        model.addAttribute("monthNames", monthNames);
 
         return "calendar";
     }
@@ -119,5 +121,17 @@ public class CalendarController {
             weeks.add(week);
         }
         return weeks;
+    }
+
+    private List<String> getMonthNamesBetween(Month startMonth, Month endMonth) {
+        int startIndex = startMonth.getValue() - 1;
+        int endIndex = endMonth.getValue() - 1;
+        List<Month> monthsBetween = IntStream.rangeClosed(startIndex, endIndex)
+                .mapToObj(Month::of)
+                .collect(Collectors.toList());
+
+        return monthsBetween.stream()
+                .map(month -> LocalizedMonth.valueOf(month.name()).getLocalizedName())
+                .collect(Collectors.toList());
     }
 }
