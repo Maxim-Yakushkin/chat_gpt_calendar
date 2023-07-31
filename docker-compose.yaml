@@ -1,0 +1,12 @@
+version: '3'
+services:
+  postgres-calendar:
+    image: postgres:latest
+    container_name: postgres-calendar
+    restart: always
+    environment:
+      POSTGRES_DB: calendar_db
+      POSTGRES_USER: calendar_user
+      POSTGRES_PASSWORD: calendar_password
+    ports:
+      - "5432:5432"
