@@ -33,9 +33,7 @@ public class CalendarController {
 
         LocalDate firstVisibleDay = weeks.get(0).get(0);
         LocalDate lastVisibleDay = weeks.get(weeks.size() - 1).get(6);
-        List<String> monthNamesBetween = getMonthNamesBetween(firstVisibleDay.getMonth(), lastVisibleDay.getMonth());
-        String monthNames = String.join(" - ", monthNamesBetween);
-
+        String monthNames = getMonthNamesBetween(firstVisibleDay, lastVisibleDay);
         model.addAttribute("monthNames", monthNames);
 
         return "calendar";
@@ -123,15 +121,25 @@ public class CalendarController {
         return weeks;
     }
 
-    private List<String> getMonthNamesBetween(Month startMonth, Month endMonth) {
-        int startIndex = startMonth.getValue() - 1;
-        int endIndex = endMonth.getValue() - 1;
-        List<Month> monthsBetween = IntStream.rangeClosed(startIndex, endIndex)
-                .mapToObj(Month::of)
-                .collect(Collectors.toList());
+    private String getMonthNamesBetween(LocalDate firstDate, LocalDate lastDate) {
+        int firstMonthValue = firstDate.getMonthValue();
+        int lastMonthValue = lastDate.getMonthValue();
+        String firstMonthName = LocalizedMonth.valueOf(firstDate.getMonth().name().toUpperCase()).getLocalizedName();
+        String lastMonthName = LocalizedMonth.valueOf(lastDate.getMonth().name().toUpperCase()).getLocalizedName();
 
-        return monthsBetween.stream()
-                .map(month -> LocalizedMonth.valueOf(month.name()).getLocalizedName())
-                .collect(Collectors.toList());
+        if (firstMonthValue == lastMonthValue) {
+            return firstMonthName;
+        } else {
+            StringBuilder sb = new StringBuilder();
+            int currentMonthValue = firstMonthValue;
+            while (currentMonthValue != lastMonthValue) {
+                String currentMonthName = LocalizedMonth.valueOf(Month.of(currentMonthValue).name().toUpperCase()).getLocalizedName();
+                sb.append(currentMonthName).append(" - ");
+                currentMonthValue = (currentMonthValue % 12) + 1;
+            }
+            sb.append(lastMonthName);
+            return sb.toString();
+        }
     }
+
 }
